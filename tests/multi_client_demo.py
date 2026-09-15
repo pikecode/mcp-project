@@ -15,7 +15,20 @@ async def namespaced_tools(client, prefix: str) -> list[str]:
     result = await client.list_tools()
     return [f"{prefix}.{tool.name}" for tool in result.tools]
 
+async def call_namespaced_tool(
+    clients: dict[str, object],
+    qualified_name: str,
+    arguments: dict[str, object],
+):
+    try:
+        prefix, tool_name = qualified_name.split(".", 1)
+    except ValueError:
+        raise ValueError("工具名称必须是 prefix.tool_name 格式")
 
+    if prefix not in clients:
+        raise ValueError(f"未知的 Server：{prefix}")
+
+    return await clients[prefix].call_tool(tool_name, arguments)
 
 async def main() -> None:
     async with (
@@ -45,6 +58,18 @@ async def main() -> None:
         print("stdio 命名工具：", local_names)
         print("HTTP 命名工具：", http_names)
 
+        clients = {
+            "stdio": local_client,
+            "http": http_client,
+        }
+
+        result = await call_namespaced_tool(
+            clients,
+            "http.add",
+            {"a": 40, "b": 2},
+        )
+
+        print("路由调用结果：", result.structured_content)
 
 if __name__ == "__main__":
     anyio.run(main)
