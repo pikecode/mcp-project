@@ -233,3 +233,14 @@ mcp-project/
 - 获取并渲染 Prompt
 
 完成阶段七后，再按需要学习 `stdio` 子进程连接、Streamable HTTP 和多 Server 管理。
+
+## 11. 阶段八：stdio 子进程连接
+
+学习 Client 通过 `StdioServerParameters` 启动独立 MCP Server：
+
+- 使用绝对路径启动项目虚拟环境中的 Python
+- 通过 `stdin/stdout` 传输 MCP 消息
+- 通过 `env` 传递受控配置
+- 理解内存连接与子进程连接的差异
+
+完成阶段八后，可选学习 Streamable HTTP 和多 Server 管理。
