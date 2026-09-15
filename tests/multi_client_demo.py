@@ -11,6 +11,11 @@ stdio_server = StdioServerParameters(
     args=[str(PROJECT_ROOT / "src/server.py")],
 )
 
+async def namespaced_tools(client, prefix: str) -> list[str]:
+    result = await client.list_tools()
+    return [f"{prefix}.{tool.name}" for tool in result.tools]
+
+
 
 async def main() -> None:
     async with (
@@ -34,6 +39,11 @@ async def main() -> None:
 
         print("stdio 结果：", local_result.structured_content)
         print("HTTP 结果：", http_result.structured_content)
+
+        local_names = await namespaced_tools(local_client, "stdio")
+        http_names = await namespaced_tools(http_client, "http")
+        print("stdio 命名工具：", local_names)
+        print("HTTP 命名工具：", http_names)
 
 
 if __name__ == "__main__":
