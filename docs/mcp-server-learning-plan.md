@@ -264,3 +264,12 @@ mcp-project/
 - 从 `result.content` 读取模型可理解的错误信息
 - 区分 ToolError、协议错误和未处理异常
 - 不在确认成功前读取或信任 `structured_content`
+
+## 14. 阶段十二：管理多个 MCP Server
+
+学习 Host 同时维护多个 Client 连接：
+
+- 同时连接 stdio 和 Streamable HTTP Server
+- 分别发现和调用工具
+- 处理不同 Server 中的同名工具
+- 为工具增加来源前缀，例如 `local.add`、`http.add`
