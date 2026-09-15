@@ -244,3 +244,23 @@ mcp-project/
 - 理解内存连接与子进程连接的差异
 
 完成阶段八后，可选学习 Streamable HTTP 和多 Server 管理。
+
+## 12. 阶段九：Streamable HTTP
+
+学习 Client 通过 URL 连接 MCP Server：
+
+- 使用 `mcp.run(transport="streamable-http")` 启动 HTTP Server
+- 通过 `/mcp` 端点提供 MCP 服务
+- 使用 `Client("http://127.0.0.1:<port>/mcp")` 连接
+- 理解 HTTP Server 生命周期和端口占用
+
+完成阶段九后，可选学习认证、部署和多 Server 管理。
+
+## 13. 阶段十：Client 错误处理
+
+学习客户端如何处理工具执行失败：
+
+- 使用 `result.is_error` 判断调用是否失败
+- 从 `result.content` 读取模型可理解的错误信息
+- 区分 ToolError、协议错误和未处理异常
+- 不在确认成功前读取或信任 `structured_content`
