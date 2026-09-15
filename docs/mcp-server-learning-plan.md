@@ -221,3 +221,15 @@ mcp-project/
 - Docker 部署
 
 扩展顺序以真实需求为准，不为假设中的未来需求提前增加复杂度。
+
+## 10. 阶段七：编写 MCP Client
+
+在完成基础 Server 后，学习使用 Python Client 主动连接 MCP Server：
+
+- 通过 `Client(mcp)` 建立内存连接
+- 列出 Server 提供的 Tools
+- 调用 Tool 并读取 `structured_content`
+- 读取 Resource
+- 获取并渲染 Prompt
+
+完成阶段七后，再按需要学习 `stdio` 子进程连接、Streamable HTTP 和多 Server 管理。
