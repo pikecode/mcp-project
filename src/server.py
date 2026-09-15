@@ -1,10 +1,13 @@
- 
+
 from pathlib import Path
 from mcp.server import MCPServer
 from mcp.server.mcpserver.exceptions import ToolError
+import os
 
 mcp = MCPServer("Learning MCP Server")
-NOTES_DIR = Path(__file__).resolve().parents[1] / "notes"
+DEFAULT_NOTES_DIR = Path(__file__).resolve().parents[1] / "notes"
+NOTES_DIR = Path(os.environ.get("MCP_NOTES_DIR", DEFAULT_NOTES_DIR)).expanduser().resolve()
+
 NOTE_PATH = NOTES_DIR / "intro.md"
 
 @mcp.tool()
