@@ -71,5 +71,15 @@ async def main() -> None:
 
         print("路由调用结果：", result.structured_content)
 
+        for invalid_name in ("add", "unknown.add"):
+            try:
+                await call_namespaced_tool(
+                    clients,
+                    invalid_name,
+                    {},
+                )
+            except ValueError as error:
+                print(f"{invalid_name}：{error}")     
+
 if __name__ == "__main__":
     anyio.run(main)
