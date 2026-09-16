@@ -358,3 +358,7 @@ mcp-project/
 - 协议版本
 - Tools、Resources、Prompts 能力
 - 根据能力声明动态决定可用操作
+
+## 20. 里程碑 F：真实 Host 集成
+
+使用 Codex 作为 MCP Host，通过本地 stdio 连接知识库 Server。配置和验收步骤见 `docs/milestone-f-codex-integration.md`。
