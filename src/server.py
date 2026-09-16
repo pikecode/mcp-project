@@ -4,7 +4,14 @@ from mcp.server import MCPServer
 from mcp.server.mcpserver.exceptions import ToolError
 import os
 
-mcp = MCPServer("Learning MCP Server")
+# mcp = MCPServer("Learning MCP Server")
+
+mcp = MCPServer(
+    "Learning MCP Server",
+    version="0.1.0",
+    instructions="这是一个本地 Markdown 知识库 MCP Server。",
+)
+
 DEFAULT_NOTES_DIR = Path(__file__).resolve().parents[1] / "notes"
 NOTES_DIR = Path(os.environ.get("MCP_NOTES_DIR", DEFAULT_NOTES_DIR)).expanduser().resolve()
 
@@ -30,7 +37,13 @@ def search_files(keyword: str, directory: str) -> list[str]:
     if not keyword:
         raise ToolError("关键词不能为空")
 
-    root = Path(directory)
+    root = Path(directory).expanduser().resolve()
+    notes_root = NOTES_DIR.resolve()
+
+    try:
+        root.relative_to(notes_root)
+    except ValueError:
+        raise ToolError("只能搜索 notes 目录内的文件")
 
     if not root.is_dir():
         raise ToolError(f"目录不存在：{directory}")

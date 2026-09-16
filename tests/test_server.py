@@ -25,6 +25,20 @@ def main() -> None:
     else:
         raise AssertionError("不存在的笔记没有被拦截")
 
+    try:
+        server.search_files("mcp", str(Path(__file__).resolve().parents[1]))
+    except ToolError as error:
+        assert "只能搜索 notes 目录内的文件" in str(error)
+    else:
+        raise AssertionError("搜索越界目录没有被拦截")
+
+    try:
+        server.create_note("../escape", "test")
+    except ToolError as error:
+        assert "只能访问 notes 目录内的文件" in str(error)
+    else:
+        raise AssertionError("创建越界文件没有被拦截")
+
     print("所有测试通过")
 
 

@@ -1,10 +1,16 @@
 from pathlib import Path
 import anyio
+import os
 
 from mcp import Client, StdioServerParameters
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
+
+HTTP_URL = os.environ.get(
+    "MCP_HTTP_URL",
+    "http://127.0.0.1:8099/mcp",
+)
 
 stdio_server = StdioServerParameters(
     command=str(PROJECT_ROOT / ".venv/bin/python"),
@@ -42,21 +48,35 @@ async def build_tool_registry(clients: dict[str, object]) -> dict[str, tuple[obj
 
     return registry
 
+# async def call_registered_tool(
+#     registry: dict[str, tuple[object, str]],
+#     qualified_name: str,
+#     arguments: dict[str, object],
+# ):
+#     if qualified_name not in registry:
+#         raise ValueError(f"工具未注册：{qualified_name}")
+
+#     client, tool_name = registry[qualified_name]
+#     return await client.call_tool(tool_name, arguments)
+
 async def call_registered_tool(
     registry: dict[str, tuple[object, str]],
     qualified_name: str,
     arguments: dict[str, object],
+    timeout_seconds: float = 10.0,
 ):
     if qualified_name not in registry:
         raise ValueError(f"工具未注册：{qualified_name}")
 
     client, tool_name = registry[qualified_name]
-    return await client.call_tool(tool_name, arguments)
+
+    with anyio.fail_after(timeout_seconds):
+        return await client.call_tool(tool_name, arguments)
 
 async def main() -> None:
     async with (
         Client(stdio_server) as local_client,
-        Client("http://127.0.0.1:8099/mcp") as http_client,
+        Client(HTTP_URL) as http_client,
     ):
         local_tools = await local_client.list_tools()
         http_tools = await http_client.list_tools()

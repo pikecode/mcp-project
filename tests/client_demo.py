@@ -31,6 +31,14 @@ async def main() -> None:
             if isinstance(message.content, TextContent):
                 print("Prompt：", message.content.text)
 
+        print("Server：", client.server_info.name)
+        print("版本：", client.server_info.version)
+        print("协议：", client.protocol_version)
+        print(
+            "能力：",
+            client.server_capabilities.model_dump(exclude_none=True),
+        )
+
 
 if __name__ == "__main__":
     anyio.run(main)

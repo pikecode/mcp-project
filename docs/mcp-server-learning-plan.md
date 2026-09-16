@@ -1,5 +1,45 @@
 # MCP Server 学习路线
 
+## 0. 总体路线与推进规则
+
+### 总目标
+
+独立设计、开发、测试和部署一个 MCP Server，并理解 Client、传输协议和多 Server Host 的基本架构。
+
+最终作品是一个可运行的本地 Markdown 知识库 MCP 项目，同时具备本地 stdio、HTTP Client、测试、配置和安全边界。
+
+### 五个宏观里程碑
+
+| 里程碑 | 目标 | 状态 |
+|---|---|---|
+| A. MCP 基础 | 理解协议、Server、Client、Tool、Resource、Prompt | 已完成 |
+| B. Server 项目 | 完成本地 Markdown 知识库 Server | 已完成 |
+| C. Client 与传输 | 掌握内存、stdio、Streamable HTTP 和错误处理 | 已完成 |
+| D. 多 Server Host | 掌握发现、命名空间、注册表和路由 | 已完成 |
+| E. 可交付项目 | 完成安全、可靠性、打包、部署和最终验收 | 进行中 |
+
+### 当前主线
+
+当前只推进里程碑 E：
+
+1. 安全边界和远程访问原则：已完成
+2. 配置、日志、超时和失败处理：已完成
+3. 可复现安装和项目打包：已完成
+4. 完整测试和最终 README
+5. 最终项目验收与发布提交
+
+### 防偏离规则
+
+- 新内容必须能明确归入当前里程碑，否则暂不学习。
+- 不在知识库项目中提前加入数据库、前端、插件市场或复杂框架。
+- 每个里程碑只保留一份总结文档；小练习记录在该文档中。
+- 每完成一个里程碑再提交一次，不为每个微小练习单独扩展方向。
+- 只有当前项目真正需要时，才学习 OAuth、Docker 或其他高级能力。
+
+里程碑 E 的第一部分总结见 `docs/milestone-e-security-boundary.md`。
+里程碑 E 的第二部分总结见 `docs/milestone-e-configuration-reliability.md`。
+里程碑 E 的第三部分总结见 `docs/milestone-e-packaging.md`。
+
 ## 1. 学习目标
 
 使用 Python 从零掌握 Model Context Protocol（模型上下文协议），最终完成一个可实际使用的本地 Markdown 知识库 MCP Server。
@@ -307,3 +347,12 @@ mcp-project/
 - 生成 `prefix.tool_name` 映射
 - 调用前判断工具是否注册
 - 避免每次调用都重新猜测目标工具
+
+## 19. 阶段十七：Server 元数据与能力发现
+
+学习 Client 连接后读取 Server 的运行信息：
+
+- Server 名称和版本
+- 协议版本
+- Tools、Resources、Prompts 能力
+- 根据能力声明动态决定可用操作
