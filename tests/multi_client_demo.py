@@ -30,6 +30,29 @@ async def call_namespaced_tool(
 
     return await clients[prefix].call_tool(tool_name, arguments)
 
+
+async def build_tool_registry(clients: dict[str, object]) -> dict[str, tuple[object, str]]:
+    registry = {}
+
+    for prefix, client in clients.items():
+        result = await client.list_tools()
+
+        for tool in result.tools:
+            registry[f"{prefix}.{tool.name}"] = (client, tool.name)
+
+    return registry
+
+async def call_registered_tool(
+    registry: dict[str, tuple[object, str]],
+    qualified_name: str,
+    arguments: dict[str, object],
+):
+    if qualified_name not in registry:
+        raise ValueError(f"工具未注册：{qualified_name}")
+
+    client, tool_name = registry[qualified_name]
+    return await client.call_tool(tool_name, arguments)
+
 async def main() -> None:
     async with (
         Client(stdio_server) as local_client,
@@ -79,7 +102,23 @@ async def main() -> None:
                     {},
                 )
             except ValueError as error:
-                print(f"{invalid_name}：{error}")     
+                print(f"{invalid_name}：{error}") 
+
+        registry = await build_tool_registry(clients)
+
+        result = await call_registered_tool(
+            registry,
+            "http.add",
+            {"a": 6, "b": 7},
+        )
+
+        print("注册表调用结果：", result.structured_content)   
+
+
+        try:
+            await call_registered_tool(registry, "http.unknown", {})
+        except ValueError as error:
+            print("未知工具：", error)       
 
 if __name__ == "__main__":
     anyio.run(main)
